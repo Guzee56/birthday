@@ -10,225 +10,202 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
 <style>
-body{
-    font-family:'Mitr',sans-serif;
-    margin:0;
-    overflow:hidden;
-    background:#e91e63;
+body {
+    font-family: 'Mitr', sans-serif;
+    margin: 0;
+    overflow: hidden;
+    background: #e91e63;
+}
+.main-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #e91e63 url('https://www.transparenttextures.com/patterns/crumpled-paper.png');
+    z-index: -1;
 }
 
-/* ⭐ ปุ่มเริ่ม */
-#startScreen{
-    position:fixed;
-    inset:0;
-    background:#e91e63;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    color:white;
-    z-index:9999;
+/* 🌟 ส่วนที่เพิ่มเข้ามา: CSS สำหรับหัวใจตก */
+#hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* สำคัญมาก! ทำให้หัวใจไม่บังการกดสไลด์รูป */
+    z-index: 0; 
 }
-#startScreen button{
-    padding:16px 34px;
-    font-size:1.2rem;
-    border:none;
-    border-radius:12px;
-    background:white;
-    color:#e91e63;
-    font-weight:bold;
+.falling-heart {
+    position: absolute;
+    top: -10%;
+    color: rgba(255, 255, 255, 0.6); /* สีหัวใจ (สีขาวโปร่งแสง) */
+    animation: fall linear forwards;
 }
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+/* ------------------------------------- */
 
-/* ⭐ หัวใจ */
-#hearts{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:5;
+.swiper {
+    width: 100%;
+    height: 100vh;
+    padding-top: 60px;
+    padding-bottom: 90px;
+    z-index: 1;
 }
-.heart{
-    position:absolute;
-    top:-20px;
-    color:white;
-    opacity:.7;
-    animation:fall linear forwards;
+.swiper-slide {
+    width: 85vw;
+    max-width: 420px;
+    height: 72vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: .45;
+    transition: .3s;
 }
-@keyframes fall{
-    to{transform:translateY(110vh);opacity:0;}
+.swiper-slide-active { opacity: 1; }
+.polaroid-box {
+    background: #fff;
+    padding: 14px 14px 60px 14px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
-
-/* พื้นหลังเดิม */
-.main-bg{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:#e91e63 url('https://www.transparenttextures.com/patterns/crumpled-paper.png');
-    z-index:-1;
+.polaroid-box img {
+    width: 100%;
+    height: 85%;
+    object-fit: contain;
 }
-
-/* swiper เดิม */
-.swiper{
-    width:100%;
-    height:100vh;
-    padding-top:60px;
-    padding-bottom:90px;
+.caption {
+    font-family: 'Pacifico', cursive;
+    color: #d81b60;
+    font-size: 1.25rem;
+    margin-top: 15px;
+    text-align: center;
 }
-
-.swiper-slide{
-    width:85vw;
-    max-width:420px;
-    height:72vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    transition:.4s;
-}
-
-/* ⭐ จางทุกอัน */
-.swiper-slide{
-    opacity:.35;
-    transform:scale(.82);
-}
-
-/* ⭐ อันกลางชัด */
-.swiper-slide-active{
-    opacity:1;
-    transform:scale(1);
-    z-index:3;
-}
-
-.polaroid-box{
-    background:#fff;
-    padding:14px 14px 60px 14px;
-    box-shadow:0 20px 40px rgba(0,0,0,.4);
-    border-radius:6px;
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-}
-
-.polaroid-box img{
-    width:100%;
-    height:85%;
-    object-fit:contain;
-}
-
-.caption{
-    font-family:'Pacifico',cursive;
-    color:#d81b60;
-    font-size:1.25rem;
-    margin-top:15px;
-    text-align:center;
-}
-
-.hbd-header{
-    font-family:'Pacifico',cursive;
-    font-size:2.6rem;
-    color:white;
-    text-align:center;
-    margin-bottom:18px;
+.hbd-header {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.6rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 18px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 </style>
 </head>
 
 <body>
 
-<!-- ⭐ หน้าเริ่ม -->
-<div id="startScreen">
-    <h1 style="font-size:2.6rem;margin-bottom:20px;">For You ❤️</h1>
-    <button onclick="startSite()">กดเพื่อเริ่มดู</button>
-</div>
+<audio id="bgm" autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
-<div id="hearts"></div>
 <div class="main-bg"></div>
 
-<!-- เว็บเดิม -->
+<div id="hearts-container"></div>
+
 <div class="swiper mySwiper">
-<div class="swiper-wrapper">
+    <div class="swiper-wrapper">
 
-<div class="swiper-slide">
-<h1 class="hbd-header">Happy Birthday</h1>
-<div class="polaroid-box">
-<img src="birthday1.png">
-<p class="caption">My Only One ❤️</p>
-</div>
-</div>
+        <div class="swiper-slide">
+            <h1 class="hbd-header">Happy Birthday</h1>
+            <div class="polaroid-box">
+                <img src="birthday1.png" alt="Pic 1">
+                <p class="caption">My Only One ❤️</p>
+            </div>
+        </div>
 
-<div class="swiper-slide">
-<h1 class="hbd-header">My Wishes</h1>
-<div class="polaroid-box">
-<img src="birthday2.png">
-<p class="caption">Sswk kub baby ❤️</p>
-</div>
-</div>
+        <div class="swiper-slide">
+            <h1 class="hbd-header">My Wishes</h1>
+            <div class="polaroid-box">
+                <img src="birthday2.png" alt="Pic 2">
+                <p class="caption">Sswk kub baby ❤️</p>
+            </div>
+        </div>
 
-<div class="swiper-slide">
-<h1 class="hbd-header">Memories</h1>
-<div class="polaroid-box">
-<img src="birthday3.png">
-<p class="caption">Growing Up ✨</p>
-</div>
-</div>
+        <div class="swiper-slide">
+            <h1 class="hbd-header">Memories</h1>
+            <div class="polaroid-box">
+                <img src="birthday3.png" alt="Pic 3">
+                <p class="caption">Growing Up ✨</p>
+            </div>
+        </div>
 
-<div class="swiper-slide">
-<h1 class="hbd-header">For You</h1>
-<div class="polaroid-box">
-<img src="flower.png">
-<p class="caption">I Love You More Than Everything ❤️</p>
-</div>
-</div>
+        <div class="swiper-slide">
+            <h1 class="hbd-header">For You</h1>
+            <div class="polaroid-box">
+                <img src="flower.png" alt="Flower">
+                <p class="caption">I Love You More Than Everything ❤️</p>
+            </div>
+        </div>
 
-</div>
+    </div>
 
-<div class="swiper-button-next"></div>
-<div class="swiper-button-prev"></div>
-<div class="swiper-pagination"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-/* เริ่มเว็บ */
-function startSite(){
-    document.getElementById("startScreen").style.display="none";
-    startHearts();
-}
-
-/* swiper เดิม */
-new Swiper(".mySwiper",{
-effect:"coverflow",
-grabCursor:true,
-centeredSlides:true,
-slidesPerView:"auto",
-loop:false,
-coverflowEffect:{
-    rotate:22,
-    stretch:0,
-    depth:350,
-    modifier:1,
-    slideShadows:false
-},
-navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},
-pagination:{el:".swiper-pagination",clickable:true}
+// Swiper Setup
+var swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+        rotate: 18,
+        depth: 260,
+        slideShadows: false,
+    },
+    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+    pagination: { el: ".swiper-pagination", clickable: true }
 });
 
-/* ⭐ หัวใจตก (ไม่เยอะ) */
-function startHearts(){
-    const box=document.getElementById("hearts");
-    setInterval(()=>{
-        const h=document.createElement("div");
-        h.className="heart";
-        h.innerHTML="❤";
-        h.style.left=Math.random()*100+"vw";
-        h.style.fontSize=(16+Math.random()*18)+"px";
-        h.style.animationDuration=(5+Math.random()*3)+"s";
-        box.appendChild(h);
-        setTimeout(()=>h.remove(),8000);
-    },600); // ⭐ ไม่เยอะ
+/* 🔥 บังคับให้เพลงเล่นบนมือถือ */
+const music = document.getElementById("bgm");
+
+function playMusic() {
+    music.play().catch(() => {});
 }
+window.addEventListener("load", playMusic);
+document.body.addEventListener("click", playMusic);
+document.body.addEventListener("touchstart", playMusic);
+
+/* 🌟 ส่วนที่เพิ่มเข้ามา: สคริปต์สร้างหัวใจตกลงมา */
+function createHeart() {
+    const container = document.getElementById('hearts-container');
+    const heart = document.createElement('div');
+    
+    heart.classList.add('falling-heart');
+    // คุณสามารถเปลี่ยนอิโมจิหัวใจตรงนี้ได้ (เช่น ❤️, 💖, ✨)
+    heart.innerHTML = '💖'; 
+    
+    // สุ่มตำแหน่งแกน X
+    heart.style.left = Math.random() * 100 + 'vw';
+    // สุ่มระยะเวลาตก (ให้ตกช้าๆ ระหว่าง 5 ถึง 9 วินาที)
+    heart.style.animationDuration = Math.random() * 4 + 5 + 's'; 
+    // สุ่มขนาดหัวใจ
+    heart.style.fontSize = Math.random() * 15 + 10 + 'px'; 
+    
+    container.appendChild(heart);
+    
+    // ลบหัวใจทิ้งเมื่อตกสุดจอแล้ว เพื่อไม่ให้กินสเปคเครื่อง
+    setTimeout(() => {
+        heart.remove();
+    }, 9000); 
+}
+
+// สร้างหัวใจใหม่ทุกๆ 1 วินาที (ไม่เยอะเกินไป)
+// หากอยากให้เยอะขึ้น ให้ลดตัวเลข 1000 ลง (เช่น 500)
+setInterval(createHeart, 500); 
+/* ------------------------------------- */
 </script>
 
 </body>
