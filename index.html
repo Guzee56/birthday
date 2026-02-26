@@ -17,11 +17,9 @@ body{
     background:#e91e63;
 }
 
-/* หน้าเริ่ม */
+/* START SCREEN */
 #startScreen{
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
+    position:fixed;inset:0;
     background:#e91e63;
     display:flex;
     flex-direction:column;
@@ -29,35 +27,24 @@ body{
     justify-content:center;
     color:white;
     z-index:9999;
-    text-align:center;
 }
-
 #startScreen button{
-    padding:16px 34px;
-    font-size:1.3rem;
-    border:none;
-    border-radius:12px;
-    background:white;
-    color:#e91e63;
+    padding:16px 36px;
+    font-size:1.2rem;
+    border:none;border-radius:12px;
+    background:white;color:#e91e63;
     font-weight:bold;
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 
-/* เว็บหลัก */
+/* BG */
 .main-bg{
-    position:fixed;
-    width:100%;
-    height:100%;
+    position:fixed;inset:0;
     background:#e91e63 url('https://www.transparenttextures.com/patterns/crumpled-paper.png');
     z-index:-1;
 }
 
-.swiper{
-    width:100%;
-    height:100vh;
-    padding-top:60px;
-    padding-bottom:90px;
-}
+/* SWIPER */
+.swiper{height:100vh;padding-top:60px;padding-bottom:90px;}
 
 .swiper-slide{
     width:85vw;
@@ -67,15 +54,26 @@ body{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    opacity:.45;
-    transition:.3s;
+    transition:.45s;
 }
-.swiper-slide-active{opacity:1;}
 
+/* การ์ดด้านหลัง */
+.swiper-slide:not(.swiper-slide-active){
+    transform:scale(.9) translateY(20px);
+    opacity:.55;
+}
+
+/* การ์ดตรงกลาง */
+.swiper-slide-active{
+    transform:scale(1.05) translateY(-10px);
+    opacity:1;
+}
+
+/* กล่องรูป */
 .polaroid-box{
     background:#fff;
-    padding:14px 14px 60px 14px;
-    box-shadow:0 20px 40px rgba(0,0,0,.4);
+    padding:14px 14px 60px;
+    box-shadow:0 25px 50px rgba(0,0,0,.45);
     border-radius:6px;
     width:100%;
     height:100%;
@@ -83,12 +81,14 @@ body{
     flex-direction:column;
 }
 
+/* รูป */
 .polaroid-box img{
     width:100%;
     height:85%;
     object-fit:contain;
 }
 
+/* ตัวอักษรชัด */
 .caption{
     font-family:'Pacifico',cursive;
     color:#d81b60;
@@ -97,52 +97,45 @@ body{
     text-align:center;
 }
 
+/* หัวข้อชัด */
 .hbd-header{
     font-family:'Pacifico',cursive;
     font-size:2.6rem;
     color:white;
-    text-align:center;
     margin-bottom:18px;
+    text-shadow:0 2px 6px rgba(0,0,0,.25);
 }
 
-/* หัวใจตก */
-#hearts{
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:5;
-}
+/* HEART */
+#hearts{position:fixed;inset:0;pointer-events:none;z-index:5;}
 .heart{
     position:absolute;
-    top:-10px;
+    top:-20px;
     color:white;
-    animation:fall linear forwards;
+    opacity:.9;
+    animation:fall linear forwards, sway 3s ease-in-out infinite alternate;
 }
-@keyframes fall{
-    to{transform:translateY(110vh) rotate(360deg);opacity:0;}
-}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+@keyframes sway{from{margin-left:-10px;}to{margin-left:10px;}}
 </style>
 </head>
 
 <body>
 
-<!-- หน้าเริ่ม -->
+<!-- START -->
 <div id="startScreen">
-    <h1 style="font-size:2.7rem;margin-bottom:20px;">For You ❤️</h1>
-    <button onclick="startSite()">กดเพื่อเริ่มดู 💕</button>
+<h1 style="font-size:2.6rem;margin-bottom:20px;">For You ❤️</h1>
+<button onclick="startSite()">กดเพื่อเริ่มดู 💕</button>
 </div>
 
-<!-- เพลง -->
 <audio id="bgm" loop>
-  <source src="music.mp3" type="audio/mpeg">
+<source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <div id="hearts"></div>
 <div class="main-bg"></div>
 
-<!-- เว็บหลัก -->
+<!-- SITE -->
 <div class="swiper mySwiper" id="mainSite" style="display:none;">
 <div class="swiper-wrapper">
 
@@ -188,42 +181,40 @@ body{
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-/* เริ่มเว็บ */
 function startSite(){
     document.getElementById("startScreen").style.display="none";
     document.getElementById("mainSite").style.display="block";
-
-    const music=document.getElementById("bgm");
-    music.play().catch(()=>{});
-
+    document.getElementById("bgm").play().catch(()=>{});
     startHearts();
 }
 
-/* swiper */
 new Swiper(".mySwiper",{
 effect:"coverflow",
 grabCursor:true,
 centeredSlides:true,
 slidesPerView:"auto",
-coverflowEffect:{rotate:18,depth:260,slideShadows:false},
+coverflowEffect:{
+rotate:0,
+depth:220,
+modifier:1.2,
+slideShadows:false
+},
 navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},
 pagination:{el:".swiper-pagination",clickable:true}
 });
 
-/* หัวใจ */
 function startHearts(){
-    const box=document.getElementById("hearts");
-
-    setInterval(()=>{
-        const h=document.createElement("div");
-        h.className="heart";
-        h.innerHTML="❤";
-        h.style.left=Math.random()*100+"vw";
-        h.style.fontSize=(15+Math.random()*35)+"px";
-        h.style.animationDuration=(4+Math.random()*4)+"s";
-        box.appendChild(h);
-        setTimeout(()=>h.remove(),8000);
-    },80);
+const box=document.getElementById("hearts");
+setInterval(()=>{
+const h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(18+Math.random()*20)+"px";
+h.style.animationDuration=(6+Math.random()*3)+"s";
+box.appendChild(h);
+setTimeout(()=>h.remove(),9000);
+},600);
 }
 </script>
 
