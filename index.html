@@ -24,34 +24,47 @@ body {
     z-index: -1;
 }
 
-/* 🌟 ส่วนที่เพิ่มเข้ามา: CSS สำหรับหัวใจตก */
+/* --- 💖 ส่วนที่เพิ่ม: CSS สำหรับหัวใจตก --- */
 #hearts-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* สำคัญมาก! ทำให้หัวใจไม่บังการกดสไลด์รูป */
-    z-index: 0; 
+    overflow: hidden;
+    pointer-events: none; /* สำคัญ: ทำให้คลิกทะลุผ่านไปกดสไลด์ได้ */
+    z-index: 0;
 }
-.falling-heart {
+
+.heart {
     position: absolute;
     top: -10%;
-    color: rgba(255, 255, 255, 0.6); /* สีหัวใจ (สีขาวโปร่งแสง) */
-    animation: fall linear forwards;
+    user-select: none;
+    animation-name: fall;
+    animation-timing-function: linear;
+    /* ใช้ filter เพื่อให้หัวใจดูฟุ้งๆ เข้ากับบรรยากาศ (ลบออกได้ถ้าชอบแบบชัดๆ) */
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); 
 }
+
 @keyframes fall {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 1;
+    }
+    100% {
+        /* ตกถึงด้านล่าง หมุน และขยับซ้ายขวานิดหน่อย */
+        transform: translateY(110vh) rotate(360deg) translateX(20px);
+        opacity: 0;
+    }
 }
-/* ------------------------------------- */
+/* --------------------------------------- */
 
 .swiper {
     width: 100%;
     height: 100vh;
     padding-top: 60px;
     padding-bottom: 90px;
-    z-index: 1;
+    z-index: 1; /* อยู่เหนือหัวใจ */
 }
 .swiper-slide {
     width: 85vw;
@@ -114,15 +127,15 @@ body {
         <div class="swiper-slide">
             <h1 class="hbd-header">Happy Birthday</h1>
             <div class="polaroid-box">
-                <img src="birthday1.png" alt="Pic 1">
-                <p class="caption">My Only One ❤️</p>
+                <img src="birthday1.png">
+                <p class="caption">My Love ❤️</p>
             </div>
         </div>
 
         <div class="swiper-slide">
             <h1 class="hbd-header">My Wishes</h1>
             <div class="polaroid-box">
-                <img src="birthday2.png" alt="Pic 2">
+                <img src="birthday2.png">
                 <p class="caption">Sswk kub baby ❤️</p>
             </div>
         </div>
@@ -130,7 +143,7 @@ body {
         <div class="swiper-slide">
             <h1 class="hbd-header">Memories</h1>
             <div class="polaroid-box">
-                <img src="birthday3.png" alt="Pic 3">
+                <img src="birthday3.png">
                 <p class="caption">Growing Up ✨</p>
             </div>
         </div>
@@ -138,7 +151,7 @@ body {
         <div class="swiper-slide">
             <h1 class="hbd-header">For You</h1>
             <div class="polaroid-box">
-                <img src="flower.png" alt="Flower">
+                <img src="flower.png">
                 <p class="caption">I Love You More Than Everything ❤️</p>
             </div>
         </div>
@@ -153,7 +166,7 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-// Swiper Setup
+// Swiper Init
 var swiper = new Swiper(".mySwiper", {
     effect: "coverflow",
     grabCursor: true,
@@ -170,7 +183,6 @@ var swiper = new Swiper(".mySwiper", {
 
 /* 🔥 บังคับให้เพลงเล่นบนมือถือ */
 const music = document.getElementById("bgm");
-
 function playMusic() {
     music.play().catch(() => {});
 }
@@ -178,38 +190,44 @@ window.addEventListener("load", playMusic);
 document.body.addEventListener("click", playMusic);
 document.body.addEventListener("touchstart", playMusic);
 
-/* 🌟 ส่วนที่เพิ่มเข้ามา: สคริปต์สร้างหัวใจตกลงมา */
+
+/* --- 💖 ส่วนที่เพิ่ม: สคริปต์สร้างหัวใจหลายแบบ --- */
+const heartsContainer = document.getElementById('hearts-container');
+const heartEmojis = ['❤️', '💝', '💗']; // รายการหัวใจที่ต้องการ
+
 function createHeart() {
-    const container = document.getElementById('hearts-container');
     const heart = document.createElement('div');
+    heart.classList.add('heart');
     
-    heart.classList.add('falling-heart');
-    // คุณสามารถเปลี่ยนอิโมจิหัวใจตรงนี้ได้ (เช่น ❤️, 💟, ✨)
-    heart.innerHTML = '❤️'; 
+    // สุ่มเลือกอีโมจิ 1 ตัวจากรายการ
+    heart.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
     
-    // สุ่มตำแหน่งแกน X
-    heart.style.left = Math.random() * 100 + 'vw';
-    // สุ่มระยะเวลาตก (ให้ตกช้าๆ ระหว่าง 5 ถึง 9 วินาที)
-    heart.style.animationDuration = Math.random() * 2 + 4 + 's'; 
-    // สุ่มขนาดหัวใจ
-    heart.style.fontSize = Math.random() * 25 + 20 + 'px'; 
+    // สุ่มตำแหน่งเริ่มต้นแนวนอน (0% ถึง 100% ของหน้าจอ)
+    heart.style.left = Math.random() * 100 + '%';
     
-    container.appendChild(heart);
+    // สุ่มขนาด (เล็ก-ใหญ่)
+    const size = Math.random() * 20 + 15; // ขนาดระหว่าง 15px ถึง 35px
+    heart.style.fontSize = size + 'px';
     
-    // ลบหัวใจทิ้งเมื่อตกสุดจอแล้ว เพื่อไม่ให้กินสเปคเครื่อง
+    // สุ่มระยะเวลาการตก (ยิ่งเลขมากยิ่งตกช้า)
+    const duration = Math.random() * 2 + 4; // ระหว่าง 5 ถึง 10 วินาที
+    heart.style.animationDuration = duration + 's';
+    
+    // สุ่มดีเลย์ก่อนเริ่มตก เพื่อให้ไม่ตกลงมาพร้อมกันหมดในตอนแรก
+    heart.style.animationDelay = Math.random() * 2 + 's';
+
+    heartsContainer.appendChild(heart);
+    
+    // ลบอิลิเมนต์เมื่อตกสุดจอแล้ว (ตามระยะเวลา animation) เพื่อคืนหน่วยความจำ
     setTimeout(() => {
         heart.remove();
-    }, 9000); 
+    }, (duration + 2) * 1000); 
 }
 
-// สร้างหัวใจใหม่ทุกๆ 1 วินาที (ไม่เยอะเกินไป)
-// หากอยากให้เยอะขึ้น ให้ลดตัวเลข 1000 ลง (เช่น 500)
-setInterval(createHeart, 200); 
-/* ------------------------------------- */
+// สร้างหัวใจใหม่ทุกๆ 600 มิลลิวินาที (ปรับเลขนี้เพื่อเพิ่ม/ลดความถี่)
+setInterval(createHeart, 600);
+/* --------------------------------------------- */
 </script>
 
 </body>
 </html>
-
-
-
