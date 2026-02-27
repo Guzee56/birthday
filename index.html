@@ -71,34 +71,38 @@ padding-top:60px;
 padding-bottom:90px;
 z-index:1;
 }
-.swiper-slide{
-width:85vw;
-max-width:420px;
-height:72vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-opacity:.45;
-transition:.3s;
+/* --- อัปเดต CSS: เอาเอฟเฟกต์จางๆ ออก --- */
+.swiper-slide {
+    width: 85vw;
+    max-width: 420px;
+    height: 72vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /* ตั้งค่าให้ทุกรูปสว่างเต็มที่ 100% เสมอ */
+    opacity: 1; 
 }
-.swiper-slide-active{opacity:1;}
 
-.polaroid-box{
-background:#fff;
-padding:14px 14px 60px 14px;
-box-shadow:0 20px 40px rgba(0,0,0,.4);
-border-radius:6px;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
+/* ลบ .swiper-slide-active อันเก่าทิ้งไปได้เลยครับ เพราะเราไม่ต้องเปลี่ยนความสว่างแล้ว */
+
+.polaroid-box {
+    background: #fff;
+    padding: 14px 14px 60px 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25); 
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    /* คงตัวนี้ไว้เพื่อให้มือถือประมวลผลการเลื่อนได้ลื่นที่สุด */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
 }
-.polaroid-box img{
-width:100%;
-height:85%;
-object-fit:contain;
-}
+/* ------------------------------------------- */
 
 .caption{
 font-family:'Pacifico',cursive;
