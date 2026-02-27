@@ -71,29 +71,42 @@ padding-top:60px;
 padding-bottom:90px;
 z-index:1;
 }
-.swiper-slide{
-width:85vw;
-max-width:420px;
-height:72vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-opacity:.45;
-transition:.3s;
+/* --- อัปเดต CSS เพื่อแก้ปัญหาการกระตุก --- */
+.swiper-slide {
+    width: 85vw;
+    max-width: 420px;
+    height: 72vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    opacity: 0.3; 
+    /* กำหนดให้ transition ทำงานแค่กับ opacity เท่านั้น (แก้ปัญหาแอนิเมชันตีกัน) */
+    transition: opacity 0.3s ease-out; 
 }
-.swiper-slide-active{opacity:1;}
 
-.polaroid-box{
-background:#fff;
-padding:14px 14px 60px 14px;
-box-shadow:0 20px 40px rgba(0,0,0,.4);
-border-radius:6px;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
+.swiper-slide-active { 
+    opacity: 1; 
 }
+
+.polaroid-box {
+    background: #fff;
+    padding: 14px 14px 60px 14px;
+    /* ลดความกว้างของเงาลงเล็กน้อย ช่วยลดภาระการ์ดจอมือถือเวลาหมุน 3D */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25); 
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    /* โค้ดสำคัญ! บังคับให้มือถือดึง GPU มาช่วยเรนเดอร์ภาพให้ลื่นติดนิ้ว */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+}
+/* ------------------------------------------- */
 .polaroid-box img{
 width:100%;
 height:85%;
